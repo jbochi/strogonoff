@@ -1,0 +1,19 @@
+About
+-----
+
+Strogonoff is a Go package to hide texts on JPEG images.
+
+It is called Strogonoff because this technique is called Stenography and was implemented with Go. Besides that, I love strogonoff, a typical Brazilian meal.
+
+Installation
+------------
+
+TODO
+
+
+Usage
+-----
+
+TODO. See the tests
+
+
