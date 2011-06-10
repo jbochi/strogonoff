@@ -89,7 +89,7 @@ type Reader interface {
 
 type decoder struct {
 	r             Reader
-	data          string // hidden data
+	data          []byte // hidden data
 	data_finished bool
 	width, height int
 	img           *ycbcr.YCbCr
@@ -321,7 +321,7 @@ func (d *decoder) processSOS(n int) os.Error {
 							}
 							d.blocks[i][j][unzig[k]] = ac * qt[k]
 							if i == 0 && k == blockSize - 1 && !d.data_finished {
-								d.data += string(ac)
+								d.data = append(d.data, byte(ac))
 							}
 						} else {
 							if val0 != 0x0f {
@@ -457,7 +457,7 @@ func Decode(r io.Reader) (image.Image, os.Error) {
 func DecodeAndRead(r io.Reader) (image.Image, string, os.Error) {
 	var d decoder
 	i, err := d.decode(r, false)
-	return i, d.data, err
+	return i, string(d.data), err
 }
 
 // DecodeConfig returns the color model and dimensions of a JPEG image without

@@ -46,15 +46,17 @@ func readPng(filename string) (image.Image, os.Error) {
 
 func TestWriteToDisk(t *testing.T) {
 	tc := testCase[len(testCase)-1]
+	msg := "Hello world!";
+
 	i, err := readPng(tc.filename)
 	if err != nil {
 		t.Error(tc.filename, err)
 	}
-	f, err := os.Create("test.jpeg")
+	f, err := os.Create("testdata/output.jpeg")
 	if err != nil {
 		t.Error(tc.filename, err)
 	}
-	err = Encode(f, i, "Hello, world!", &Options{Quality: tc.quality})
+	err = Encode(f, i, msg, &Options{Quality: tc.quality})
 	if err != nil {
 		t.Error(tc.filename, err)
 	}
@@ -62,7 +64,7 @@ func TestWriteToDisk(t *testing.T) {
 
 func TestWriter(t *testing.T) {
 	for _, tc := range testCase {
-		msg := "hello world!";
+		msg := "hello world; or こんにちは 世界";
 
 		// Read the image.
 		m0, err := readPng(tc.filename)
