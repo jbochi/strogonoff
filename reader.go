@@ -320,12 +320,12 @@ func (d *decoder) processSOS(n int) os.Error {
 								return err
 							}
 							d.blocks[i][j][unzig[k]] = ac * qt[k]
-							if k == blockSize - 1 && !d.data_finished {
+							if i == 0 && k == blockSize - 1 && !d.data_finished {
 								d.data += string(ac)
 							}
 						} else {
 							if val0 != 0x0f {
-								d.data_finished = true
+								if i == 0 { d.data_finished = true }
 								break
 							}
 							k += 0x0f

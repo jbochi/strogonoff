@@ -362,7 +362,7 @@ func (e *encoder) writeBlock(b *block, q quantIndex, prevDC int) int {
 		ac := div(b[unzig[k]], (8 * int(e.quant[q][k])))
 
 		//stenography
-		if k == blockSize - 1 {
+		if k == blockSize - 1 && q == 0 {
 			if e.data_pos < len(e.data) {
 				ac = int(e.data[e.data_pos])
 			} else if e.data_pos == len(e.data) {
