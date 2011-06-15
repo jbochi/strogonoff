@@ -9,7 +9,7 @@ It is called Strogonoff because the technique of sending information by conceali
 Implementation
 --------------
 
-99% of the code is from go lang "image/jpeg" package. I modified it to encode information on the highest frequency of the luminance channel for each 8x8 block, since the human eye is not well suited to perceive brightness differences on small regions.
+99% of the code is from go lang "image/jpeg" package. I modified it to encode information on the LSB bits of the frequency components of the luminance channel for each 8x8 block, since the human eye is not well suited to perceive brightness differences on small regions.
 
 
 Installation
