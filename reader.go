@@ -90,6 +90,7 @@ type Reader interface {
 type decoder struct {
 	r             Reader
 	data          []byte // hidden data
+	data_bit      int
 	data_finished bool
 	width, height int
 	img           *ycbcr.YCbCr
@@ -320,12 +321,24 @@ func (d *decoder) processSOS(n int) os.Error {
 								return err
 							}
 							d.blocks[i][j][unzig[k]] = ac * qt[k]
-							if i == 0 && k == blockSize - 1 && !d.data_finished {
-								d.data = append(d.data, byte(ac))
+							if i == 0 && (ac < -1 || ac > 1) && !d.data_finished {
+								bit := ac & 1
+								if d.data_bit == 0 {
+									d.data = append(d.data, byte(bit))
+								} else {
+									d.data[len(d.data) - 1] = d.data[len(d.data) - 1] << 1
+									if bit != 0 {
+										d.data[len(d.data) - 1] |= 1
+									}
+								}
+								d.data_bit = (d.data_bit + 1) % 8
+								if d.data_bit == 0 && d.data[len(d.data) - 1] == 0 {
+									d.data = d.data[:len(d.data) - 1]
+									d.data_finished = true
+								}
 							}
 						} else {
 							if val0 != 0x0f {
-								if i == 0 { d.data_finished = true }
 								break
 							}
 							k += 0x0f

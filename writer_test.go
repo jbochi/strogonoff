@@ -19,7 +19,7 @@ var testCase = []struct {
 	quality   int
 	tolerance int64
 }{
-	{"testdata/video-001.png", 1, 24 << 8},
+	//{"testdata/video-001.png", 1, 24 << 8}, // -> too small to encode text
 	{"testdata/video-001.png", 20, 12 << 8},
 	{"testdata/video-001.png", 60, 8 << 8},
 	{"testdata/video-001.png", 80, 6 << 8},
@@ -64,7 +64,7 @@ func TestWriteToDisk(t *testing.T) {
 
 func TestWriter(t *testing.T) {
 	for _, tc := range testCase {
-		msg := "hello world; or こんにちは 世界";
+		msg := "Hello world; or こんにちは 世界!";
 
 		// Read the image.
 		m0, err := readPng(tc.filename)

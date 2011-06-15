@@ -361,13 +361,27 @@ func (e *encoder) writeBlock(b *block, q quantIndex, prevDC int) int {
 	for k := 1; k < blockSize; k++ {
 		ac := div(b[unzig[k]], (8 * int(e.quant[q][k])))
 
-		//stenography
-		if k == blockSize - 1 && q == 0 {
-			if e.data_pos < len(e.data) {
-				ac = int(e.data[e.data_pos])
-			} else if e.data_pos == len(e.data) {
-				ac = 0
+		//steganography
+		if q == 0 && (ac < -1 || ac > 1) && (e.data_pos / 8 <= len(e.data)) {
+			var data_byte int
+			if e.data_pos / 8 == len(e.data) {
+				data_byte = 0 // null terminated string
+			} else {
+				data_byte = int(e.data[e.data_pos / 8])
 			}
+			mask := int(1 << uint(7 - e.data_pos % 8))
+			data_bit := data_byte & mask
+
+			// use LSB to store data bit
+			negative := ac < 0
+			if negative { ac = -ac }
+			if data_bit != 0 {
+				ac |= 1
+			} else {
+				ac &= ^1
+			}
+			if negative { ac = -ac }
+
 			e.data_pos++
 		}
 
